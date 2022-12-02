@@ -45,20 +45,22 @@ linkedListNode *makeLinkedNode(void)
     return linkedNodePointer;
 }
 
-void insertNodeToLinkedList(linkedListNode **headPointer)
+void insertNodeToLinkedList(linkedListNode **headPointer, int numOfNodes)
 {
-    linkedListNode *newNode = makeLinkedNode();
-    // printf("%d ", newNode->data->priority);
-    linkedListNode *temp = *headPointer;
+    for (int i = 0; i < numOfNodes; i++)
+    {
+        linkedListNode *newNode = makeLinkedNode();
+        linkedListNode *temp = *headPointer;
 
-    if (*headPointer == NULL)
-    {
-        *headPointer = newNode;
-    }
-    else
-    {
-        *headPointer = newNode;
-        newNode->next = temp;
+        if (*headPointer == NULL)
+        {
+            *headPointer = newNode;
+        }
+        else
+        {
+            *headPointer = newNode;
+            newNode->next = temp;
+        }
     }
 }
 
@@ -66,7 +68,7 @@ void deleteTopPriorityFromLinkedList(linkedListNode **headPointer)
 {
     linkedListNode *temp = *headPointer;
     linkedListNode *temp2 = *headPointer;
-    linkedListNode *tempMax = *headPointer;
+    linkedListNode *tempBiggestPriorityLinkedNode = *headPointer;
 
     if (*headPointer == NULL)
     {
@@ -75,23 +77,23 @@ void deleteTopPriorityFromLinkedList(linkedListNode **headPointer)
     {
         while (temp != NULL)
         {
-            if (temp->data->priority > tempMax->data->priority)
+            if (temp->data->priority > tempBiggestPriorityLinkedNode->data->priority)
             {
-                tempMax = temp;
+                tempBiggestPriorityLinkedNode = temp;
             }
             temp = temp->next;
         }
-        if (tempMax == *headPointer)
+        if (tempBiggestPriorityLinkedNode == *headPointer)
         {
             *headPointer = (*headPointer)->next;
         }
         else
         {
-            while (temp2->next != tempMax)
+            while (temp2->next != tempBiggestPriorityLinkedNode)
             {
                 temp2 = temp2->next;
             }
-            temp2->next = tempMax->next;
+            temp2->next = tempBiggestPriorityLinkedNode->next;
         }
     }
 }

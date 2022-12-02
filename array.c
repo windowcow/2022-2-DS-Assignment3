@@ -19,7 +19,7 @@ char *generateRandomString(void)
     return s;
 }
 
-data *makeData(void)
+data *makeRandomData(void)
 {
     data *n = malloc(sizeof(data));
     n->priority = rand() % 1000;
@@ -37,7 +37,7 @@ void insertNodeToArray(data **array, int arraySize)
 {
     for (int i = 0; i < arraySize; i++)
     {
-        array[i] = makeData();
+        array[i] = makeRandomData();
     }
 }
 
