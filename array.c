@@ -19,7 +19,7 @@ char *generateRandomString(void)
     return s;
 }
 
-data *makeNode(void)
+data *makeData(void)
 {
     data *n = malloc(sizeof(data));
     n->priority = rand() % 1000;
@@ -27,7 +27,7 @@ data *makeNode(void)
     return n;
 }
 
-data **makeArray(int arraySize)
+data **makeEmptyArray(int arraySize)
 {
     data **array = (data **)malloc(sizeof(data *) * arraySize);
     return array;
@@ -37,8 +37,7 @@ void insertNodeToArray(data **array, int arraySize)
 {
     for (int i = 0; i < arraySize; i++)
     {
-        array[i] = makeNode();
-        // printf("%d ", array[i]->priority);
+        array[i] = makeData();
     }
 }
 
@@ -61,10 +60,12 @@ void selectionSort(data **array, int arraySize)
 
 void popBiggestPriority(data **array, int arraySize)
 {
+    selectionSort(array, arraySize);
     for (int i = 0; i < arraySize; i++)
     {
-        // printf("%d ", array[i]->priority);
-        array[i] = NULL;
+        printf("%d ", array[i]->priority);
+        free(array[i]->c);
+        free(array[i]);
     }
 }
 
@@ -78,7 +79,7 @@ int main(void)
     int arraySize;
     scanf("%d", &arraySize);
 
-    data **array = makeArray(arraySize);
+    data **array = makeEmptyArray(arraySize);
     printf("Insert : ");
     start = clock();
     insertNodeToArray(array, arraySize);
@@ -91,7 +92,6 @@ int main(void)
     printf("\nPop : ");
 
     start = clock();
-    selectionSort(array, arraySize);
     popBiggestPriority(array, arraySize);
     end = clock();
 

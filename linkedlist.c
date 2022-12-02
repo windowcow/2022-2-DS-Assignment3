@@ -2,23 +2,17 @@
 #include <stdlib.h>
 #include <time.h>
 
-/*
-linkedList에서는 차라리 우선순위 큰 순서대로 들어가게끔 만드는게 훨씬 쉽다.
-온 순서대로 넣고 우선순위 큰 애들을 골라서 빼려면 엄청 복잡하다.
-
-*/
-
 typedef struct data
 {
     int priority;
     char *c;
 } data;
 
-typedef struct node
+typedef struct linkedListNode
 {
     data *data;
-    struct node *next;
-} node;
+    struct linkedListNode *next;
+} linkedListNode;
 
 char *generateRandomString(void)
 {
@@ -41,9 +35,9 @@ data *makeRandomData(void)
     return d;
 }
 
-node *makeLinkedNode(void)
+linkedListNode *makeLinkedNode(void)
 {
-    node *linkedNodePointer = (node *)malloc(sizeof(node));
+    linkedListNode *linkedNodePointer = (linkedListNode *)malloc(sizeof(linkedListNode));
 
     linkedNodePointer->data = makeRandomData();
     linkedNodePointer->next = NULL;
@@ -51,11 +45,11 @@ node *makeLinkedNode(void)
     return linkedNodePointer;
 }
 
-void insertNode(node **headPointer)
+void insertNodeToLinkedList(linkedListNode **headPointer)
 {
-    node *newNode = makeLinkedNode();
+    linkedListNode *newNode = makeLinkedNode();
     // printf("%d ", newNode->data->priority);
-    node *temp = *headPointer;
+    linkedListNode *temp = *headPointer;
 
     if (*headPointer == NULL)
     {
@@ -68,11 +62,11 @@ void insertNode(node **headPointer)
     }
 }
 
-void deleteTopPriority(node **headPointer)
+void deleteTopPriorityFromLinkedList(linkedListNode **headPointer)
 {
-    node *temp = *headPointer;
-    node *temp2 = *headPointer;
-    node *tempMax = *headPointer;
+    linkedListNode *temp = *headPointer;
+    linkedListNode *temp2 = *headPointer;
+    linkedListNode *tempMax = *headPointer;
 
     if (*headPointer == NULL)
     {
@@ -100,7 +94,6 @@ void deleteTopPriority(node **headPointer)
             temp2->next = tempMax->next;
         }
     }
-    // printf("%d ", tempMax->data->priority);
 }
 
 int main(void)
@@ -109,7 +102,7 @@ int main(void)
     double insertTime, popTime, totalTime;
 
     clock_t start, end;
-    node *head = NULL;
+    linkedListNode *head = NULL;
 
     int arraySize;
     scanf("%d", &arraySize);
@@ -119,7 +112,7 @@ int main(void)
     printf("Insert : ");
     for (int i = 0; i < arraySize; i++)
     {
-        insertNode(&head);
+        insertNodeToLinkedList(&head);
     }
     end = clock();
 
@@ -132,7 +125,7 @@ int main(void)
     start = clock();
     for (int i = 0; i < arraySize; i++)
     {
-        deleteTopPriority(&head);
+        deleteTopPriorityFromLinkedList(&head);
     }
     end = clock();
     popTime = (double)(end - start);
