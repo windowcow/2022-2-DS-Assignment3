@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define MAX_ELEMENTS 10000000
+#define MAX_ELEMENTS 100
 #define HEAP_FULL(n) (n == MAX_ELEMENTS - 1)
 #define HEAP_EMPTY(n) (!n)
 
@@ -87,37 +87,34 @@ int main(void)
     double insertTime, popTime, totalTime;
 
     clock_t start, end;
-    
-    int arraySize;
-    scanf("%d", &arraySize);
 
     // insert
     start = clock();
     ////
-    printf("insert:  ");
-    for (int i = 0; i < arraySize; i++)
+    printf("\ninsert:  ");
+    for (int i = 0; i < 100; i++)
     {
         d = makeRandomData();
-        // printf("%d ", d->priority);
+        printf("%d ", d->priority);
         push(*d, &n);
     }
     end = clock();
 
     insertTime = (double)(end - start);
-    printf("\nInsert에 소요 시간: %lfms\n", insertTime);
+    printf("\n\nInsert에 소요 시간: %lfms\n", insertTime);
 
     // pop
     printf("\npop: ");
 
     start = clock();
-    for (int i = 0; i < arraySize; i++)
+    for (int i = 0; i < 100; i++)
     {
         d = popHeap(&n);
-        // printf("%d ", d->priority);
+        printf("%d ", d->priority);
     }
     end = clock();
     popTime = (double)(end - start);
-    printf("\nPop에 소요 시간: %lfms", popTime);
+    printf("\n\nPop에 소요 시간: %lfms\n", popTime);
 
     // total
     totalTime = insertTime + popTime;

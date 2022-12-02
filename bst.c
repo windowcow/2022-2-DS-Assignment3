@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-typedef struct bstNode *treePointer;
+typedef struct node *treePointer;
 
 typedef struct data
 {
@@ -10,12 +10,12 @@ typedef struct data
     char *c;
 } data;
 
-typedef struct bstNode
+typedef struct node
 {
     data data;
     treePointer leftChild;
     treePointer rightChild;
-} bstNode;
+} node;
 
 char *generateRandomString(void)
 {
@@ -40,7 +40,7 @@ data *makeRandomData(void)
 
 treePointer makeTreeNode(void)
 {
-    treePointer treePointerPointer = (treePointer)malloc(sizeof(bstNode));
+    treePointer treePointerPointer = (treePointer)malloc(sizeof(node));
 
     treePointerPointer->data = *makeRandomData();
     treePointerPointer->leftChild = NULL;
@@ -77,7 +77,7 @@ void deleteMaxPriorityNode(treePointer *root)
         int result = (*root)->data.priority;
         treePointer temp = *root;
         *root = (*root)->leftChild;
-        // printf("%d ", result);
+        printf("%d ", result);
     }
     // 오른 자식이 있는 경우 그 오른자식을 재귀적으로 계속 타고가서 없앰
     else
@@ -94,34 +94,30 @@ int main(void)
     clock_t start, end;
     treePointer root = NULL;
 
-    int arraySize;
-    scanf("%d", &arraySize);
-
     // insert
     start = clock();
     ////
-    printf("insert:  ");
-    for (int i = 0; i < arraySize; i++)
+    printf("\ninsert:  ");
+    for (int i = 0; i < 100; i++)
     {
-        insertTreeNode(&root, makeTreeNode());
-        // printf("%d ", insertTreeNode(&root, makeTreeNode()));
+        printf("%d ", insertTreeNode(&root, makeTreeNode()));
     }
     end = clock();
 
     insertTime = (double)(end - start);
-    printf("\nInsert에 소요 시간: %lfms\n", insertTime);
+    printf("\n\nInsert에 소요 시간: %lfms\n", insertTime);
 
     // pop
     printf("\npop: ");
 
     start = clock();
-    for (int i = 0; i < arraySize; i++)
+    for (int i = 0; i < 100; i++)
     {
         deleteMaxPriorityNode(&root);
     }
     end = clock();
     popTime = (double)(end - start);
-    printf("\nPop에 소요 시간: %lfms", popTime);
+    printf("\n\nPop에 소요 시간: %lfms\n", popTime);
 
     // total
     totalTime = insertTime + popTime;

@@ -2,17 +2,23 @@
 #include <stdlib.h>
 #include <time.h>
 
+/*
+linkedList에서는 차라리 우선순위 큰 순서대로 들어가게끔 만드는게 훨씬 쉽다.
+온 순서대로 넣고 우선순위 큰 애들을 골라서 빼려면 엄청 복잡하다.
+
+*/
+
 typedef struct data
 {
     int priority;
     char *c;
 } data;
 
-typedef struct linkedListNode
+typedef struct node
 {
     data *data;
-    struct linkedListNode *next;
-} linkedListNode;
+    struct node *next;
+} node;
 
 char *generateRandomString(void)
 {
@@ -35,9 +41,9 @@ data *makeRandomData(void)
     return d;
 }
 
-linkedListNode *makeLinkedNode(void)
+node *makeLinkedNode(void)
 {
-    linkedListNode *linkedNodePointer = (linkedListNode *)malloc(sizeof(linkedListNode));
+    node *linkedNodePointer = (node *)malloc(sizeof(node));
 
     linkedNodePointer->data = makeRandomData();
     linkedNodePointer->next = NULL;
@@ -45,30 +51,28 @@ linkedListNode *makeLinkedNode(void)
     return linkedNodePointer;
 }
 
-void insertNodeToLinkedList(linkedListNode **headPointer, int numOfNodes)
+void insertNode(node **headPointer)
 {
-    for (int i = 0; i < numOfNodes; i++)
-    {
-        linkedListNode *newNode = makeLinkedNode();
-        linkedListNode *temp = *headPointer;
+    node *newNode = makeLinkedNode();
+    printf("%d ", newNode->data->priority);
+    node *temp = *headPointer;
 
-        if (*headPointer == NULL)
-        {
-            *headPointer = newNode;
-        }
-        else
-        {
-            *headPointer = newNode;
-            newNode->next = temp;
-        }
+    if (*headPointer == NULL)
+    {
+        *headPointer = newNode;
+    }
+    else
+    {
+        *headPointer = newNode;
+        newNode->next = temp;
     }
 }
 
-void deleteTopPriorityFromLinkedList(linkedListNode **headPointer)
+void deleteTopPriority(node **headPointer)
 {
-    linkedListNode *temp = *headPointer;
-    linkedListNode *temp2 = *headPointer;
-    linkedListNode *tempBiggestPriorityLinkedNode = *headPointer;
+    node *temp = *headPointer;
+    node *temp2 = *headPointer;
+    node *tempMax = *headPointer;
 
     if (*headPointer == NULL)
     {
@@ -77,25 +81,26 @@ void deleteTopPriorityFromLinkedList(linkedListNode **headPointer)
     {
         while (temp != NULL)
         {
-            if (temp->data->priority > tempBiggestPriorityLinkedNode->data->priority)
+            if (temp->data->priority > tempMax->data->priority)
             {
-                tempBiggestPriorityLinkedNode = temp;
+                tempMax = temp;
             }
             temp = temp->next;
         }
-        if (tempBiggestPriorityLinkedNode == *headPointer)
+        if (tempMax == *headPointer)
         {
             *headPointer = (*headPointer)->next;
         }
         else
         {
-            while (temp2->next != tempBiggestPriorityLinkedNode)
+            while (temp2->next != tempMax)
             {
                 temp2 = temp2->next;
             }
-            temp2->next = tempBiggestPriorityLinkedNode->next;
+            temp2->next = tempMax->next;
         }
     }
+    printf("%d ", tempMax->data->priority);
 }
 
 int main(void)
@@ -104,34 +109,31 @@ int main(void)
     double insertTime, popTime, totalTime;
 
     clock_t start, end;
-    linkedListNode *head = NULL;
-
-    int arraySize;
-    scanf("%d", &arraySize);
+    node *head = NULL;
 
     // insert
     start = clock();
-    printf("Insert : ");
-    for (int i = 0; i < arraySize; i++)
+    printf("\ninsert:  ");
+    for (int i = 0; i < 100; i++)
     {
-        insertNodeToLinkedList(&head);
+        insertNode(&head);
     }
     end = clock();
 
     insertTime = (double)(end - start);
-    printf("\nInsert에 소요 시간: %lfms\n", insertTime);
+    printf("\n\nInsert에 소요 시간: %lfms\n", insertTime);
 
     // pop
     printf("\npop: ");
 
     start = clock();
-    for (int i = 0; i < arraySize; i++)
+    for (int i = 0; i < 100; i++)
     {
-        deleteTopPriorityFromLinkedList(&head);
+        deleteTopPriority(&head);
     }
     end = clock();
     popTime = (double)(end - start);
-    printf("\nPop에 소요 시간: %lfms", popTime);
+    printf("\n\nPop에 소요 시간: %lfms\n", popTime);
 
     // total
     totalTime = insertTime + popTime;

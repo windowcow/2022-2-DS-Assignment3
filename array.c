@@ -19,7 +19,7 @@ char *generateRandomString(void)
     return s;
 }
 
-data *makeRandomData(void)
+data *makeNode(void)
 {
     data *n = malloc(sizeof(data));
     n->priority = rand() % 1000;
@@ -27,46 +27,51 @@ data *makeRandomData(void)
     return n;
 }
 
-data **makeEmptyArray(int arraySize)
+data **makeArray(void)
 {
-    data **array = (data **)malloc(sizeof(data *) * arraySize);
+    data **array = (data **)malloc(100 * sizeof(data *));
+
     return array;
 }
 
-void insertNodeToArray(data **array, int arraySize)
+void insertNodeToArray(data **array, data *n)
 {
-    for (int i = 0; i < arraySize; i++)
+    int i = 0;
+    while (array[i] != NULL)
     {
-        array[i] = makeRandomData();
+        i++;
     }
+    printf("%d ", n->priority);
+    array[i] = n;
 }
 
-void selectionSort(data **array, int arraySize)
+void popBiggestPriority(data **array)
 {
-    for (int i = 0; i < arraySize; i++)
+    int maxIndex;
+    int maxIndexNotNullflag = 0;
+
+    for (int i = 0; i < 100; i++)
     {
-        for (int j = i + 1; j < arraySize; j++)
+        if (array[i] != NULL)
         {
-            if (array[i]->priority < array[j]->priority)
+            if (maxIndexNotNullflag == 0)
             {
-                // 바꾸기
-                data *tempData = array[i];
-                array[i] = array[j];
-                array[j] = tempData;
+                maxIndex = i;
+                maxIndexNotNullflag = 1;
+            }
+            else
+            {
+                if (array[i]->priority > array[maxIndex]->priority)
+                {
+                    maxIndex = i;
+                }
             }
         }
     }
-}
 
-void popBiggestPriority(data **array, int arraySize)
-{
-    selectionSort(array, arraySize);
-    for (int i = 0; i < arraySize; i++)
-    {
-        printf("%d ", array[i]->priority);
-        free(array[i]->c);
-        free(array[i]);
-    }
+    printf("%d ", array[maxIndex]->priority);
+    free(array[maxIndex]);
+    array[maxIndex] = NULL;
 }
 
 int main(void)
@@ -76,25 +81,29 @@ int main(void)
 
     clock_t start, end;
 
-    int arraySize;
-    scanf("%d", &arraySize);
-
-    data **array = makeEmptyArray(arraySize);
+    data **array = makeArray();
     printf("Insert : ");
     start = clock();
-    insertNodeToArray(array, arraySize);
+    for (int i = 0; i < 100; i++)
+    {
 
+        data *n = makeNode();
+        insertNodeToArray(array, n);
+    }
     end = clock();
 
     insertTime = (double)(end - start);
     printf("\nInsert에 소요 시간: %lfms\n", insertTime);
 
     printf("\nPop : ");
-
     start = clock();
-    popBiggestPriority(array, arraySize);
-    end = clock();
+    for (int i = 0; i < 100; i++)
+    {
+        data *n = makeNode(); // 같은 조건을 위해서 넣었습니다.
+        popBiggestPriority(array);
+    }
 
+    end = clock();
     popTime = (double)(end - start);
     printf("\nPop에 소요 시간: %lfms\n", popTime);
 

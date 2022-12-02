@@ -2,3 +2,5 @@
 /.vscode
 /Archive.zip
 /linkedlist1.dSYM
+a.text
+.gitignore
